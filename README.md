@@ -8,7 +8,7 @@
 
 ## ③DEMO
 
-デプロイしている場合はURLを記入（任意）
+https://yusuke1976.github.io/kadai02_janken_rich/
 
 ## ④作ったアプリケーション用のIDまたはPasswordがある場合
 
