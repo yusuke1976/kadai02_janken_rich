@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script src="js/jquery-2.1.3.min.js"></script>
+    <link rel="stylesheet" href="css/sample2.css">
+    <title>じゃんけんアプリ（コンピュータ対決）</title>
+    <style>
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            margin-bottom: 30px;
+        }
+
+        .win {
+            animation: win 0.5s infinite;
+        }
+        
+        @keyframes win {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        .shake {
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+            100% { transform: translateX(0); }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>じゃんけんアプリ（コンピュータ対戦）</h1>
+    </header>
+
+    <main style="display:none;">
+        <div class="taisen">
+        <h3 id="btn"> 対戦スタート </h3>
+        </div>
+
+        <ul>
+            <li>コンピュータ１の出した手は？</li>
+            <li>コンピュータ２の出した手は？</li>
+        </ul>
+
+        <div>
+            <span id="pc1_hands"></span>
+            <span id="pc2_hands"></span>
+        </div>
+
+        <h3>結果は？</h3>
+        <div id="judgment"></div>
+
+        <h3>スコア</h3>
+        <div>
+            コンピュータ１: <span id="score1">0</span>
+            コンピュータ２: <span id="score2">0</span>
+        </div>
+    </main>
+
+    <footer></footer>
+
+    <script>
+    $("main").slideDown(500);
+    
+    var result1 = ""
+    var result2 = ""
+    var score1 = 0;
+    var score2 = 0;
+    var voices = window.speechSynthesis.getVoices();
+
+    $("#btn").on("click",function(){
+        var rr = "";
+        const r = Math.ceil(Math.random()*3);
+        let view1 = "";
+        if(r==1){
+            view1 = '<img src="img/guu.png">';
+            var rr = 1;
+        }
+        if(r==2){
+            view1 = '<img src="img/choki.png">';
+            var rr = 2;
+        }
+        if(r==3){
+            view1 = '<img src="img/paa.png">';
+            var rr = 3;
+        }
+
+        var ss = "";
+        const s = Math.ceil(Math.random()*3);
+        let view2 = "";
+        if(s==1){
+            view2 = '<img src="img/guu.png">';
+            var ss = 1;
+        }
+        if(s==2){
+            view2 = '<img src="img/choki.png">';
+            var ss = 2;
+        }
+        if(s==3){
+            view2 = '<img src="img/paa.png">';
+            var ss = 3;
+        }
+
+        result1 = rr; 
+        result2 = ss;
+
+        $("#pc1_hands").html(view1);
+        $("#pc2_hands").html(view2);
+
+        if((result1 == 1) && (result2 == 1)){
+            view11 = "あいこです";
+        }
+        if((result1 == 1) && (result2 == 2)){
+            view11 = "コンピュータ１の勝ち"
+            score1++;
+        }
+        if((result1 == 1) && (result2 == 3)){
+            view11 = "コンピュータ２の勝ち"
+            score2++;
+        }
+
+        if((result1 == 2) && (result2 == 1)){
+            view11 = "コンピュータ２の勝ち";
+            score2++;
+        }
+        if((result1 == 2) && (result2 == 2)){
+            view11 = "あいこです"
+        }
+        if((result1 == 2) && (result2 == 3)){
+            view11 = "コンピュータ１の勝ち"
+            score1++;
+        }
+
+        if((result1 == 3) && (result2 == 1)){
+            view11 = "コンピュータ１の勝ち";
+            score1++;
+        }
+        if((result1 == 3) && (result2 == 2)){
+            view11 = "コンピュータ２の勝ち"
+            score2++;
+        }
+        if((result1 == 3) && (result2 == 3)){
+            view11 = "あいこです"
+        }
+
+        $("#judgment").html(view11);
+        $("#score1").html(score1);
+        $("#score2").html(score2);
+
+
+        // 画像のアニメーション
+        if (view11.includes("コンピュータ１の勝ち")) {
+                $("#pc1_hands img").addClass("win");
+                $("body").addClass("shake");
+            } else if (view11.includes("コンピュータ２の勝ち")) {
+                $("#pc2_hands img").addClass("win");
+                $("body").addClass("shake");
+            } else {
+                $("#pc1_hands img, #pc2_hands img").removeClass("win");
+                $("body").removeClass("shake");
+            }
+
+            setTimeout(function() {
+                $("#pc1_hands img, #pc2_hands img").removeClass("win");
+                $("body").removeClass("shake");
+            }, 1000);
+    
+        let utterance = new SpeechSynthesisUtterance(view11);
+            utterance.voice = voices[0];
+            window.speechSynthesis.speak(utterance);
+
+    })
+
+    </script>
+</body>
+</html>
